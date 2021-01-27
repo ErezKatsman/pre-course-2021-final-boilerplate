@@ -1,12 +1,13 @@
 const textInput = document.getElementById("text-input");
 const addButton = document.getElementById("add-button");
 const viewSection = document.getElementById("view-section");
+let taskArr = [];
 
 if (localStorage.getItem("taskArr") === null) {
   localStorage.setItem("taskArr", "[]");
 } else {
   let priority = document.getElementById("priority-selector").value;
-  const taskArr = JSON.parse(localStorage.getItem("taskArr"));
+  taskArr = JSON.parse(localStorage.getItem("taskArr"));
   for (let i = 0; i < taskArr.length; i++) {
     const todoContainer = document.createElement("div");
     todoContainer.className = "todo-container";
@@ -29,9 +30,7 @@ if (localStorage.getItem("taskArr") === null) {
 }
 
 const countText = document.getElementById("counter");
-countText.innerText = `${
-  JSON.parse(localStorage.getItem("taskArr")).length
-} tasks`;
+countText.innerText = `${JSON.parse(localStorage.getItem("taskArr")).length}`;
 
 addButton.addEventListener("click", () => {
   const task = textInput.value;
