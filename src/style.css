@@ -8,7 +8,6 @@ body {
   min-height: 100 vh;
   background-image: linear-gradient(100deg, #4088fb, #0853cc);
   color: white;
-  font-family: "Permanent Marker", cursive;
 }
 
 #title {
@@ -40,6 +39,7 @@ body {
 }
 
 .todo-container {
+  margin: 10px;
   display: flex;
   flex-direction: row;
 }
