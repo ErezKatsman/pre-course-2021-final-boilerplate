@@ -1,10 +1,16 @@
+if (localStorage.getItem("taskArr") === null) {
+  localStorage.setItem("taskArr", "[]");
+}
+
 const textInput = document.getElementById("text-input");
 const addButton = document.getElementById("add-button");
 const viewSection = document.getElementById("view-section");
 const priority = document.getElementById("priority-selector").value;
-let counter = 0;
+
 const countText = document.getElementById("counter");
-countText.innerText = `${counter} tasks`;
+countText.innerText = `${
+  JSON.parse(localStorage.getItem("taskArr")).length
+} tasks`;
 
 addButton.addEventListener("click", () => {
   const task = textInput.value;
@@ -13,8 +19,6 @@ addButton.addEventListener("click", () => {
   }
   textInput.value = "";
 
-  counter++;
-  countText.innerText = `${counter} tasks`;
   const todoContainer = document.createElement("div");
   todoContainer.className = "todo-container";
 
@@ -32,4 +36,17 @@ addButton.addEventListener("click", () => {
 
   todoContainer.append(priorityDiv, createdAtDiv, textDiv);
   viewSection.appendChild(todoContainer);
+
+  let newArr = JSON.parse(localStorage.getItem("taskArr"));
+  console.log(newArr);
+  newArr.push({
+    priority: priority,
+    date: new Date().toDateString(),
+    task: task,
+  });
+
+  localStorage.setItem("taskArr", JSON.stringify(newArr));
+  countText.innerText = `${
+    JSON.parse(localStorage.getItem("taskArr")).length
+  } tasks`;
 });

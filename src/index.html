@@ -6,12 +6,18 @@
     <title>My TODO List</title>
     <link rel="stylesheet" href="style.css" />
     <script src="utils.js"></script>
+    <link rel="preconnect" href="https://fonts.gstatic.com" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Permanent+Marker&display=swap"
+      rel="stylesheet"
+    />
   </head>
   <body>
-    <h1>Todolist</h1>
+    <header>
+      <h1 id="title">Todolist</h1>
+    </header>
     <h3 id="counter"></h3>
     <div id="control-section">
-      <input type="text" name="task" id="text-input" />
       <select id="priority-selector">
         <option value="1">1</option>
         <option value="2">2</option>
@@ -19,6 +25,8 @@
         <option value="4">4</option>
         <option value="5">5</option>
       </select>
+      <input type="text" name="task" id="text-input" />
+
       <button id="add-button">add</button>
     </div>
     <div id="view-section"></div>
