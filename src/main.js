@@ -130,3 +130,14 @@ function colorTask(numStr) {
       break;
   }
 }
+
+const pins = document.getElementsByClassName("pin");
+console.log(pins);
+for (let i = 0; i < pins.length; i++) {
+  pins[i].addEventListener("click", (e) => {
+    pins[i].parentNode.remove();
+    let taskArr = JSON.parse(localStorage.getItem("taskArr"));
+    taskArr.splice(i, 1);
+    localStorage.setItem("taskArr", JSON.stringify(taskArr));
+  });
+}
