@@ -2,15 +2,15 @@ const textInput = document.getElementById("text-input");
 const addButton = document.getElementById("add-button");
 const sortButton = document.getElementById("sort-button");
 const viewSection = document.getElementById("view-section");
-let taskArr = [];
+// let taskArr = [];
 
 //if the local storage is empty set empty tasks array else save in the LS
 if (localStorage.getItem("taskArr") === null) {
   localStorage.setItem("taskArr", "[]");
 } else {
   let priority = document.getElementById("priority-selector").value;
-  taskArr = JSON.parse(localStorage.getItem("taskArr"));
-  printViewSection(taskArr);
+  // taskArr = JSON.parse(localStorage.getItem("taskArr"));
+  printViewSection(JSON.parse(localStorage.getItem("taskArr")));
 }
 
 const countText = document.getElementById("counter");
@@ -51,11 +51,11 @@ addButton.addEventListener("click", () => {
   todoContainer.append(pin, priorityDiv, createdAtDiv, textDiv);
   viewSection.appendChild(todoContainer);
 
-  taskArr.push({
-    priority: priority,
-    date: new Date().toDateString(),
-    task: task,
-  });
+  // taskArr.push({
+  //   priority: priority,
+  //   date: new Date().toDateString(),
+  //   task: task,
+  // });
 
   let newArr = JSON.parse(localStorage.getItem("taskArr"));
 
@@ -70,7 +70,10 @@ addButton.addEventListener("click", () => {
 });
 
 sortButton.addEventListener("click", () => {
-  let newArr = [];
+  const newArr = [];
+  //
+  const taskArr = JSON.parse(localStorage.getItem("taskArr"));
+  //
   for (let j = 5; j >= 1; j--) {
     for (let i = 0; i < taskArr.length; i++) {
       if (Number(taskArr[i].priority) === j) {
@@ -131,16 +134,28 @@ function colorTask(numStr) {
   }
 }
 
-const pins = document.getElementsByClassName("pin");
-console.log(pins);
-for (let i = 0; i < pins.length; i++) {
-  pins[i].addEventListener("click", (e) => {
-    pins[i].parentNode.remove();
-    let taskArr = JSON.parse(localStorage.getItem("taskArr"));
-    taskArr.splice(i, 1);
-    localStorage.setItem("taskArr", JSON.stringify(taskArr));
-    countText.innerText = `${
-      JSON.parse(localStorage.getItem("taskArr")).length
-    }`;
-  });
-}
+// const pins = document.getElementsByClassName("pin");
+// console.log(pins);
+// for (let i = 0; i < pins.length; i++) {
+document.addEventListener("click", (e) => {
+  if (e.target.className !== "pin") {
+    return;
+  } else {
+  }
+  e.target.parentNode.remove();
+  let taskArr = document.getElementsByClassName("todo-container");
+  let newArr = [];
+  for (const task of taskArr) {
+    const priority = task.childNodes[1].innerHTML;
+    const date = task.childNodes[2].innerHTML;
+    const taskInner = task.childNodes[3].innerHTML;
+    newArr.push({
+      priority: priority,
+      date: Date,
+      task: taskInner,
+    });
+  }
+  localStorage.setItem("taskArr", JSON.stringify(newArr));
+  countText.innerText = `${JSON.parse(localStorage.getItem("taskArr")).length}`;
+});
+// }
