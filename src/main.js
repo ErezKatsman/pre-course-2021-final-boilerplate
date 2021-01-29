@@ -139,5 +139,8 @@ for (let i = 0; i < pins.length; i++) {
     let taskArr = JSON.parse(localStorage.getItem("taskArr"));
     taskArr.splice(i, 1);
     localStorage.setItem("taskArr", JSON.stringify(taskArr));
+    countText.innerText = `${
+      JSON.parse(localStorage.getItem("taskArr")).length
+    }`;
   });
 }
