@@ -7,28 +7,74 @@
     <link rel="stylesheet" href="style.css" />
     <script src="utils.js"></script>
     <link rel="preconnect" href="https://fonts.gstatic.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" />
     <link
-      href="https://fonts.googleapis.com/css2?family=Permanent+Marker&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Alfa+Slab+One&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="preconnect" href="https://fonts.gstatic.com" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Just+Me+Again+Down+Here&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"
+    />
+    <link rel="preconnect" href="https://fonts.gstatic.com" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Satisfy&display=swap"
       rel="stylesheet"
     />
   </head>
   <body>
-    <header>
+    <div class="contact-container">
+      <div class="contact-inner">
+        <h2 class="ek-title">Erez Katsman</h2>
+        <br />
+        <div class="icons-div">
+          <a
+            a
+            href="mailto:erezkatsman2311@gmail.com"
+            style="text-decoration: none"
+            target="_blank"
+            ><i class="fa-3x fa-envelope-square"></i
+          ></a>
+          <a
+            href="https://codepen.io/erezkatsman"
+            style="text-decoration: none"
+            target="_blank"
+            ><i class="fa-3x fa-codepen"></i
+          ></a>
+          <a
+            href="https://github.com/ErezKatsman"
+            style="text-decoration: none"
+            target="_blank"
+            ><i class="fa-3x fa-github"></i
+          ></a>
+        </div>
+      </div>
+    </div>
+
+    <header id="header">
       <h1 id="title">Todolist</h1>
     </header>
-    <h3><span id="counter"></span>tasks</h3>
-    <div id="control-section">
-      <select id="priority-selector">
-        <option value="1">1</option>
-        <option value="2">2</option>
-        <option value="3">3</option>
-        <option value="4">4</option>
-        <option value="5">5</option>
-      </select>
-      <input type="text" name="task" id="text-input" />
 
-      <button id="add-button">add</button>
-      <button id="sort-button">sort</button>
+    <div id="control-section">
+      <div class="inputs">
+        <select id="priority-selector">
+          <option value="1" style="background-color: #faa7ff">1</option>
+          <option value="2" style="background-color: #9fff67">2</option>
+          <option value="3" style="background-color: #fffe93">3</option>
+          <option value="4" style="background-color: #ffc76b">4</option>
+          <option value="5" style="background-color: #9efff6">5</option>
+        </select>
+        <input type="text" name="task" id="text-input" />
+
+        <button id="add-button">add</button>
+        <button id="sort-button">sort</button>
+      </div>
+      <h3 class="number-tasks"><span id="counter"></span> tasks</h3>
     </div>
     <div id="view-section"></div>
     <script src="main.js"></script>
