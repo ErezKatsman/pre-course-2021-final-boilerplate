@@ -147,4 +147,15 @@ document.addEventListener("click", (e) => {
   countText.innerText = `${JSON.parse(localStorage.getItem("taskArr")).length}`;
 });
 
-document.addEventListener("mousemove", (e) => {});
+// document.addEventListener("mousemove", (e) => {
+//   if (e.target.className !== "pin") {
+//     return;
+//   }
+//   tooltipElem = document.createElement("div");
+//   tooltipElem.className = "tooltip";
+
+// });
+
+// const darkLight = document.getElementById("dark-light");
+// const them;
+// darkLight.addEventListener("click", (e) => {});
