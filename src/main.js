@@ -146,3 +146,5 @@ document.addEventListener("click", (e) => {
   localStorage.setItem("taskArr", JSON.stringify(newArr));
   countText.innerText = `${JSON.parse(localStorage.getItem("taskArr")).length}`;
 });
+
+document.addEventListener("mousemove", (e) => {});
