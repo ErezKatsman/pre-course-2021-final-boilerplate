@@ -2,14 +2,12 @@ const textInput = document.getElementById("text-input");
 const addButton = document.getElementById("add-button");
 const sortButton = document.getElementById("sort-button");
 const viewSection = document.getElementById("view-section");
-// let taskArr = [];
 
 //if the local storage is empty set empty tasks array else save in the LS
 if (localStorage.getItem("taskArr") === null) {
   localStorage.setItem("taskArr", "[]");
 } else {
   let priority = document.getElementById("priority-selector").value;
-  // taskArr = JSON.parse(localStorage.getItem("taskArr"));
   printViewSection(JSON.parse(localStorage.getItem("taskArr")));
 }
 
@@ -50,12 +48,6 @@ addButton.addEventListener("click", () => {
 
   todoContainer.append(pin, priorityDiv, createdAtDiv, textDiv);
   viewSection.appendChild(todoContainer);
-
-  // taskArr.push({
-  //   priority: priority,
-  //   date: new Date().toDateString(),
-  //   task: task,
-  // });
 
   let newArr = JSON.parse(localStorage.getItem("taskArr"));
 
@@ -135,7 +127,7 @@ function colorTask(numStr) {
 }
 
 document.addEventListener("click", (e) => {
-  if (e.target.className != "pin") {
+  if (e.target.className !== "pin") {
     return;
   }
   e.target.parentNode.remove();
@@ -154,5 +146,3 @@ document.addEventListener("click", (e) => {
   localStorage.setItem("taskArr", JSON.stringify(newArr));
   countText.innerText = `${JSON.parse(localStorage.getItem("taskArr")).length}`;
 });
-
-// }
