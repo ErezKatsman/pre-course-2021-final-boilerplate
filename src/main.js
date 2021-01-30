@@ -131,6 +131,9 @@ document.addEventListener("click", (e) => {
     return;
   }
   e.target.parentNode.remove();
+  const tooltipElem = document.getElementById("tooltip-delete");
+  tooltipElem.hidden = true;
+  tooltipElem.hidden = true;
   let taskArr = document.getElementsByClassName("todo-container");
   let newArr = [];
   for (const task of taskArr) {
@@ -147,15 +150,30 @@ document.addEventListener("click", (e) => {
   countText.innerText = `${JSON.parse(localStorage.getItem("taskArr")).length}`;
 });
 
-// document.addEventListener("mousemove", (e) => {
-//   if (e.target.className !== "pin") {
-//     return;
-//   }
-//   tooltipElem = document.createElement("div");
-//   tooltipElem.className = "tooltip";
+document.addEventListener("mouseover", (e) => {
+  if (e.target.className !== "pin") {
+    return;
+  }
+  const tooltipElem = document.getElementById("tooltip-delete");
+  tooltipElem.style.top = e.target.getBoundingClientRect().top - 40 + "px";
+  tooltipElem.style.left = e.target.getBoundingClientRect().left - 10 + "px";
+  tooltipElem.hidden = false;
+});
 
-// });
+document.addEventListener("mouseout", (e) => {
+  if (e.target.className !== "pin") {
+    return;
+  }
+  const tooltipElem = document.getElementById("tooltip-delete");
+  tooltipElem.hidden = true;
+});
 
-// const darkLight = document.getElementById("dark-light");
-// const them;
-// darkLight.addEventListener("click", (e) => {});
+const darkLight = document.getElementById("dark-light");
+const theme = document.querySelector("#theme-link");
+darkLight.addEventListener("click", () => {
+  if (theme.getAttribute("href") == "style.css") {
+    theme.href = "dark.css";
+  } else {
+    theme.href = "style.css";
+  }
+});
