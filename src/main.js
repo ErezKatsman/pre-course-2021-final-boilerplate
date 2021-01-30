@@ -134,13 +134,9 @@ function colorTask(numStr) {
   }
 }
 
-// const pins = document.getElementsByClassName("pin");
-// console.log(pins);
-// for (let i = 0; i < pins.length; i++) {
 document.addEventListener("click", (e) => {
-  if (e.target.className !== "pin") {
+  if (e.target.className != "pin") {
     return;
-  } else {
   }
   e.target.parentNode.remove();
   let taskArr = document.getElementsByClassName("todo-container");
@@ -151,11 +147,12 @@ document.addEventListener("click", (e) => {
     const taskInner = task.childNodes[3].innerHTML;
     newArr.push({
       priority: priority,
-      date: Date,
+      date: date,
       task: taskInner,
     });
   }
   localStorage.setItem("taskArr", JSON.stringify(newArr));
   countText.innerText = `${JSON.parse(localStorage.getItem("taskArr")).length}`;
 });
+
 // }
