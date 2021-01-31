@@ -20,8 +20,9 @@ addButton.addEventListener("click", () => {
   pin.style.backgroundColor = `#${randomColor}`;
 
   const task = textInput.value;
-  if (task === "" || task === " ") {
+  if (task === "") {
     //if the input is empty - get out from the function
+    alert("Please enter your task and prioirity");
     return;
   }
   textInput.value = ""; //make the input empty again
@@ -129,9 +130,6 @@ document.addEventListener("click", (e) => {
     return;
   }
   e.target.parentNode.remove();
-  const tooltipElem = document.getElementById("tooltip-delete");
-  tooltipElem.hidden = true;
-  tooltipElem.hidden = true;
   let taskArr = document.getElementsByClassName("todo-container");
   let newArr = [];
   for (const task of taskArr) {
@@ -153,18 +151,18 @@ document.addEventListener("mouseover", (e) => {
   if (e.target.className !== "pin") {
     return;
   }
-  const tooltipElem = document.getElementById("tooltip-delete");
-  tooltipElem.style.top = e.target.getBoundingClientRect().top - 40 + "px";
-  tooltipElem.style.left = e.target.getBoundingClientRect().left - 10 + "px";
-  tooltipElem.hidden = false;
+  const tooltipDelete = document.getElementById("tooltip-delete");
+  tooltipDelete.style.top = e.target.getBoundingClientRect().top - 40 + "px";
+  tooltipDelete.style.left = e.target.getBoundingClientRect().left - 10 + "px";
+  tooltipDelete.hidden = false;
 });
 //and mouseout for the tooltip
 document.addEventListener("mouseout", (e) => {
   if (e.target.className !== "pin") {
     return;
   }
-  const tooltipElem = document.getElementById("tooltip-delete");
-  tooltipElem.hidden = true;
+  const tooltipDelete = document.getElementById("tooltip-delete");
+  tooltipDelete.hidden = true;
 });
 
 //event of dark or light mode that toggle the css href
@@ -186,3 +184,54 @@ if (localStorage.getItem("mode") === "dark") {
   theme.href = "dark.css";
   darkLight.innerText = "light";
 }
+
+//event of a edit tooltip
+document.addEventListener("mouseover", (e) => {
+  if (e.target.className !== "todo-text") {
+    return;
+  }
+  const tooltipEdit = document.getElementById("tooltip-edit");
+  tooltipEdit.style.top = e.target.getBoundingClientRect().top - 40 + "px";
+  tooltipEdit.style.left = e.target.getBoundingClientRect().left + 0 + "px";
+  tooltipEdit.hidden = false;
+});
+//and mouseout for the tooltip
+document.addEventListener("mouseout", (e) => {
+  if (e.target.className !== "todo-text") {
+    return;
+  }
+  const tooltipEdit = document.getElementById("tooltip-edit");
+  tooltipEdit.hidden = true;
+});
+
+document.addEventListener("dblclick", (e) => {
+  if (e.target.className !== "todo-text") {
+    return;
+  }
+  e.target.contentEditable = true;
+  document.addEventListener("keydown", (event) => {
+    if (event.ctrlKey) {
+      if (e.target.innerHTML === "") {
+        alert("You can't save an empty task");
+        return;
+      }
+      e.target.contentEditable = false;
+      let taskArr = document.getElementsByClassName("todo-container");
+      let newArr = [];
+      for (const task of taskArr) {
+        const priority = task.childNodes[1].innerHTML;
+        const date = task.childNodes[2].innerHTML;
+        const taskInner = task.childNodes[3].innerHTML;
+        newArr.push({
+          priority: priority,
+          date: date,
+          task: taskInner,
+        });
+      }
+      localStorage.setItem("taskArr", JSON.stringify(newArr));
+      countText.innerText = `${
+        JSON.parse(localStorage.getItem("taskArr")).length
+      }`;
+    }
+  });
+});
