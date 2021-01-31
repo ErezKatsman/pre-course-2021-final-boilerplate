@@ -58,19 +58,25 @@ addButton.addEventListener("click", () => {
   localStorage.setItem("taskArr", JSON.stringify(newArr));
   countText.innerText = `${JSON.parse(localStorage.getItem("taskArr")).length}`;
 });
-
-//event of the sort button
+let isSorted = false;
+//event of the sort button and unsort
 sortButton.addEventListener("click", () => {
-  const newArr = [];
-  const taskArr = JSON.parse(localStorage.getItem("taskArr"));
-  for (let j = 5; j >= 1; j--) {
-    for (let i = 0; i < taskArr.length; i++) {
-      if (Number(taskArr[i].priority) === j) {
-        newArr.push(taskArr[i]);
+  if (isSorted === false) {
+    isSorted = true;
+    const newArr = [];
+    const taskArr = JSON.parse(localStorage.getItem("taskArr"));
+    for (let j = 5; j >= 1; j--) {
+      for (let i = 0; i < taskArr.length; i++) {
+        if (Number(taskArr[i].priority) === j) {
+          newArr.push(taskArr[i]);
+        }
       }
     }
+    printViewSection(newArr);
+  } else {
+    isSorted = false;
+    printViewSection(JSON.parse(localStorage.getItem("taskArr")));
   }
-  printViewSection(newArr);
 });
 
 //function that gets the type of arr that we have in local storage => arr of objects
@@ -215,7 +221,7 @@ document.addEventListener("dblclick", (e) => {
   e.target.innerHTML = task;
 });
 
-//runction that saving all the tasks i nthe local storage
+//function that saving all the tasks in the local storage
 function savingCanges() {
   let taskArr = document.getElementsByClassName("todo-container");
   let newArr = [];
@@ -235,6 +241,9 @@ function savingCanges() {
 
 searchButton.addEventListener("click", () => {
   const searchInput = textInput.value;
+  if (searchInput === "") {
+    return;
+  }
   textInput.value = "";
   const taskArr = document.querySelectorAll(".todo-text");
   for (const task of taskArr) {
