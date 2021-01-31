@@ -1,256 +1,272 @@
-const textInput = document.getElementById("text-input"); //text input
-const addButton = document.getElementById("add-button"); //add button
-const sortButton = document.getElementById("sort-button"); // sort button
-const viewSection = document.getElementById("view-section"); //the view section
-const countText = document.getElementById("counter"); // the counter tasks
-const searchButton = document.getElementById("search-button");
+async function main() {
+  const textInput = document.getElementById("text-input"); //text input
+  const addButton = document.getElementById("add-button"); //add button
+  const sortButton = document.getElementById("sort-button"); // sort button
+  const viewSection = document.getElementById("view-section"); //the view section
+  const countText = document.getElementById("counter"); // the counter tasks
+  const searchButton = document.getElementById("search-button");
 
-//if the local storage is empty set empty tasks array else save in the LS
-if (localStorage.getItem("taskArr") === null) {
-  localStorage.setItem("taskArr", "[]");
-} else {
-  printViewSection(JSON.parse(localStorage.getItem("taskArr")));
-}
-countText.innerText = `${JSON.parse(localStorage.getItem("taskArr")).length}`;
-
-//event of add button that add to local storage and to view section
-addButton.addEventListener("click", () => {
-  const pin = document.createElement("div"); //making the pin with random color
-  pin.className = "pin";
-  var randomColor = Math.floor(Math.random() * 16777215).toString(16);
-  pin.style.backgroundColor = `#${randomColor}`;
-
-  const task = textInput.value;
-  if (task === "") {
-    //if the input is empty - get out from the function
-    alert("Please enter your task and prioirity");
-    return;
+  async function getPersistent() {
+    const response = await fetch(
+      "https://api.jsonbin.io/v3/b/6016e8c70ba5ca5799d1b5f9/latest"
+    );
+    const data = await response.json();
+    return data.record["my-todo"];
   }
-  textInput.value = ""; //make the input empty again
-  let priority = document.getElementById("priority-selector").value;
-  const todoContainer = document.createElement("div");
-  todoContainer.className = "todo-container";
 
-  const color = colorTask(priority); //paint the task backgorund div for each priority
-  todoContainer.style.backgroundColor = color;
-
-  const priorityDiv = document.createElement("div"); //making priority div
-  priorityDiv.innerHTML = priority;
-  priorityDiv.className = "todo-priority";
-
-  const createdAtDiv = document.createElement("div"); //making date div
-  createdAtDiv.innerHTML = new Date().toDateString();
-  createdAtDiv.className = "todo-created-at";
-
-  const textDiv = document.createElement("div"); //created task div
-  textDiv.innerHTML = task;
-  textDiv.className = "todo-text";
-
-  todoContainer.append(pin, priorityDiv, createdAtDiv, textDiv);
-  viewSection.appendChild(todoContainer);
-
-  let newArr = JSON.parse(localStorage.getItem("taskArr")); //push to the local storage the new task
-  newArr.push({
-    priority: priority,
-    date: new Date().toDateString(),
-    task: task,
-  });
-  localStorage.setItem("taskArr", JSON.stringify(newArr));
-  countText.innerText = `${JSON.parse(localStorage.getItem("taskArr")).length}`;
-});
-let isSorted = false;
-//event of the sort button and unsort
-sortButton.addEventListener("click", () => {
-  if (isSorted === false) {
-    isSorted = true;
-    const newArr = [];
-    const taskArr = JSON.parse(localStorage.getItem("taskArr"));
-    for (let j = 5; j >= 1; j--) {
-      for (let i = 0; i < taskArr.length; i++) {
-        if (Number(taskArr[i].priority) === j) {
-          newArr.push(taskArr[i]);
-        }
-      }
-    }
-    printViewSection(newArr);
-  } else {
-    isSorted = false;
-    printViewSection(JSON.parse(localStorage.getItem("taskArr")));
+  async function setPersistent(data) {
+    await fetch("https://api.jsonbin.io/v3/b/6016e8c70ba5ca5799d1b5f9", {
+      method: "put",
+      headers: { "Content-type": "application/json" },
+      body: JSON.stringify({ "my-todo": data }),
+    });
   }
-});
 
-//function that gets the type of arr that we have in local storage => arr of objects
-function printViewSection(arr) {
-  viewSection.innerText = "";
-  for (let i = 0; i < arr.length; i++) {
-    const pin = document.createElement("div");
+  let taskArr = await getPersistent();
+  printViewSection(taskArr);
+  countText.innerText = JSON.stringify(taskArr.length);
+
+  //event of add button that add to local storage and to view section
+  await addButton.addEventListener("click", async () => {
+    const pin = document.createElement("div"); //making the pin with random color
     pin.className = "pin";
     var randomColor = Math.floor(Math.random() * 16777215).toString(16);
     pin.style.backgroundColor = `#${randomColor}`;
+
+    const task = textInput.value;
+    if (task === "") {
+      //if the input is empty - get out from the function
+      alert("Please enter your task and prioirity");
+      return;
+    }
+    textInput.value = ""; //make the input empty again
+    let priority = document.getElementById("priority-selector").value;
     const todoContainer = document.createElement("div");
     todoContainer.className = "todo-container";
 
-    const priorityDiv = document.createElement("div");
-    priorityDiv.innerHTML = arr[i].priority;
-    priorityDiv.className = "todo-priority";
-
-    const color = colorTask(arr[i].priority);
+    const color = colorTask(priority); //paint the task backgorund div for each priority
     todoContainer.style.backgroundColor = color;
 
-    const createdAtDiv = document.createElement("div");
-    createdAtDiv.innerHTML = arr[i].date;
+    const priorityDiv = document.createElement("div"); //making priority div
+    priorityDiv.innerHTML = priority;
+    priorityDiv.className = "todo-priority";
+
+    const createdAtDiv = document.createElement("div"); //making date div
+    createdAtDiv.innerHTML = new Date().toDateString();
     createdAtDiv.className = "todo-created-at";
 
-    const textDiv = document.createElement("div");
-    textDiv.innerHTML = arr[i].task;
+    const textDiv = document.createElement("div"); //created task div
+    textDiv.innerHTML = task;
     textDiv.className = "todo-text";
+
     todoContainer.append(pin, priorityDiv, createdAtDiv, textDiv);
     viewSection.appendChild(todoContainer);
-  }
-}
 
-//function that get a number of prioirity and returns a color
-function colorTask(numStr) {
-  switch (numStr) {
-    case "1":
-      return "#faa7ff";
-      break;
-    case "2":
-      return "#9fff67";
-      break;
-    case "3":
-      return "#fffe93";
-      break;
-    case "4":
-      return "#ffc76b";
-      break;
-    case "5":
-      return "#7efff3";
-      break;
-  }
-}
+    taskArr.push({
+      priority: priority,
+      date: new Date().toDateString(),
+      text: task,
+    });
+    await setPersistent(taskArr);
+    countText.innerText = taskArr.length;
+  });
 
-//event that delete an item in the view section and loacl storage
-document.addEventListener("click", (e) => {
-  if (e.target.className !== "pin") {
-    //if you dont click on the pin
-    return;
-  }
-  const tooltipDelete = document.getElementById("tooltip-delete");
-  e.target.parentNode.remove();
-  tooltipDelete.hidden = true;
-  savingCanges();
-});
-
-//event of a delete pin tooltip
-document.addEventListener("mouseover", (e) => {
-  if (e.target.className !== "pin") {
-    return;
-  }
-  const tooltipDelete = document.getElementById("tooltip-delete");
-  tooltipDelete.style.top = e.target.getBoundingClientRect().top - 40 + "px";
-  tooltipDelete.style.left = e.target.getBoundingClientRect().left - 10 + "px";
-  tooltipDelete.hidden = false;
-});
-//and mouseout for the tooltip
-document.addEventListener("mouseout", (e) => {
-  if (e.target.className !== "pin") {
-    return;
-  }
-  const tooltipDelete = document.getElementById("tooltip-delete");
-  tooltipDelete.hidden = true;
-});
-
-//event of dark or light mode that toggle the css href
-const darkLight = document.getElementById("dark-light");
-const theme = document.querySelector("#theme-link");
-darkLight.addEventListener("click", () => {
-  if (theme.getAttribute("href") == "style.css") {
-    theme.href = "dark.css";
-    localStorage.setItem("mode", "dark");
-    darkLight.innerText = "light";
-  } else {
-    theme.href = "style.css";
-    localStorage.setItem("mode", "light");
-    darkLight.innerText = "dark";
-  }
-});
-if (localStorage.getItem("mode") === "dark") {
-  // saving the loacl storage mode
-  theme.href = "dark.css";
-  darkLight.innerText = "light";
-}
-
-//event of a edit tooltip
-document.addEventListener("mouseover", (e) => {
-  if (e.target.className !== "todo-text") {
-    return;
-  }
-  const tooltipEdit = document.getElementById("tooltip-edit");
-  tooltipEdit.style.top = e.target.getBoundingClientRect().top - 40 + "px";
-  tooltipEdit.style.left = e.target.getBoundingClientRect().left + 0 + "px";
-  tooltipEdit.hidden = false;
-});
-//and mouseout for the tooltip
-document.addEventListener("mouseout", (e) => {
-  if (e.target.className !== "todo-text") {
-    return;
-  }
-  const tooltipEdit = document.getElementById("tooltip-edit");
-  tooltipEdit.hidden = true;
-});
-
-//double click on .todo-text div for edit
-document.addEventListener("dblclick", (e) => {
-  const task = e.target.innerHTML;
-  if (e.target.className !== "todo-text") {
-    return;
-  }
-  e.target.contentEditable = true;
-  //CTRL to save the edit task
-  document.addEventListener("keydown", (event) => {
-    if (event.ctrlKey) {
-      // you cant save an empty task
-      if (e.target.innerHTML === "") {
-        e.target.innerHTML = task;
+  let isSorted = false;
+  //event of the sort button and unsort
+  sortButton.addEventListener("click", async () => {
+    if (isSorted === false) {
+      isSorted = true;
+      const newArr = [];
+      for (let j = 5; j >= 1; j--) {
+        for (let i = 0; i < taskArr.length; i++) {
+          if (Number(taskArr[i].priority) === j) {
+            newArr.push(taskArr[i]);
+          }
+        }
       }
-      e.target.contentEditable = false;
-      savingCanges();
+      printViewSection(newArr);
+    } else {
+      isSorted = false;
+      printViewSection(taskArr);
     }
   });
-  e.target.innerHTML = task;
-});
 
-//function that saving all the tasks in the local storage
-function savingCanges() {
-  let taskArr = document.getElementsByClassName("todo-container");
-  let newArr = [];
-  for (const task of taskArr) {
-    const priority = task.childNodes[1].innerHTML;
-    const date = task.childNodes[2].innerHTML;
-    const taskInner = task.childNodes[3].innerHTML;
-    newArr.push({
-      priority: priority,
-      date: date,
-      task: taskInner,
-    });
-  }
-  localStorage.setItem("taskArr", JSON.stringify(newArr));
-  countText.innerText = `${JSON.parse(localStorage.getItem("taskArr")).length}`;
-}
+  //function that gets the type of arr that we have in local storage => arr of objects
+  function printViewSection(arr) {
+    viewSection.innerText = "";
+    for (let i = 0; i < arr.length; i++) {
+      const pin = document.createElement("div");
+      pin.className = "pin";
+      var randomColor = Math.floor(Math.random() * 16777215).toString(16);
+      pin.style.backgroundColor = `#${randomColor}`;
+      const todoContainer = document.createElement("div");
+      todoContainer.className = "todo-container";
 
-searchButton.addEventListener("click", () => {
-  const searchInput = textInput.value;
-  if (searchInput === "") {
-    return;
-  }
-  textInput.value = "";
-  const taskArr = document.querySelectorAll(".todo-text");
-  for (const task of taskArr) {
-    if (task.innerHTML.search(searchInput) !== -1) {
-      task.style.color = "red";
-    } else {
-      task.style.color = "#444444";
+      const priorityDiv = document.createElement("div");
+      priorityDiv.innerHTML = arr[i].priority;
+      priorityDiv.className = "todo-priority";
+
+      const color = colorTask(arr[i].priority);
+      todoContainer.style.backgroundColor = color;
+
+      const createdAtDiv = document.createElement("div");
+      createdAtDiv.innerHTML = arr[i].date;
+      createdAtDiv.className = "todo-created-at";
+
+      const textDiv = document.createElement("div");
+      textDiv.innerHTML = arr[i].text;
+      textDiv.className = "todo-text";
+      todoContainer.append(pin, priorityDiv, createdAtDiv, textDiv);
+      viewSection.appendChild(todoContainer);
     }
   }
-});
+
+  //function that get a number of prioirity and returns a color
+  function colorTask(numStr) {
+    switch (numStr) {
+      case "1":
+        return "#faa7ff";
+        break;
+      case "2":
+        return "#9fff67";
+        break;
+      case "3":
+        return "#fffe93";
+        break;
+      case "4":
+        return "#ffc76b";
+        break;
+      case "5":
+        return "#7efff3";
+        break;
+    }
+  }
+
+  //event that delete an item in the view section and loacl storage
+  document.addEventListener("click", (e) => {
+    if (e.target.className !== "pin") {
+      //if you dont click on the pin
+      return;
+    }
+    const tooltipDelete = document.getElementById("tooltip-delete");
+    e.target.parentNode.remove();
+    tooltipDelete.hidden = true;
+    savingCanges();
+  });
+
+  //event of a delete pin tooltip
+  document.addEventListener("mouseover", (e) => {
+    if (e.target.className !== "pin") {
+      return;
+    }
+    const tooltipDelete = document.getElementById("tooltip-delete");
+    tooltipDelete.style.top = e.target.getBoundingClientRect().top - 40 + "px";
+    tooltipDelete.style.left =
+      e.target.getBoundingClientRect().left - 10 + "px";
+    tooltipDelete.hidden = false;
+  });
+  //and mouseout for the tooltip
+  document.addEventListener("mouseout", (e) => {
+    if (e.target.className !== "pin") {
+      return;
+    }
+    const tooltipDelete = document.getElementById("tooltip-delete");
+    tooltipDelete.hidden = true;
+  });
+
+  //event of dark or light mode that toggle the css href
+  const darkLight = document.getElementById("dark-light");
+  const theme = document.querySelector("#theme-link");
+  darkLight.addEventListener("click", () => {
+    if (theme.getAttribute("href") == "style.css") {
+      theme.href = "dark.css";
+      localStorage.setItem("mode", "dark");
+      darkLight.innerText = "light";
+    } else {
+      theme.href = "style.css";
+      localStorage.setItem("mode", "light");
+      darkLight.innerText = "dark";
+    }
+  });
+  if (localStorage.getItem("mode") === "dark") {
+    // saving the loacl storage mode
+    theme.href = "dark.css";
+    darkLight.innerText = "light";
+  }
+
+  //event of a edit tooltip
+  document.addEventListener("mouseover", (e) => {
+    if (e.target.className !== "todo-text") {
+      return;
+    }
+    const tooltipEdit = document.getElementById("tooltip-edit");
+    tooltipEdit.style.top = e.target.getBoundingClientRect().top - 40 + "px";
+    tooltipEdit.style.left = e.target.getBoundingClientRect().left + 0 + "px";
+    tooltipEdit.hidden = false;
+  });
+  //and mouseout for the tooltip
+  document.addEventListener("mouseout", (e) => {
+    if (e.target.className !== "todo-text") {
+      return;
+    }
+    const tooltipEdit = document.getElementById("tooltip-edit");
+    tooltipEdit.hidden = true;
+  });
+
+  //double click on .todo-text div for edit
+  document.addEventListener("dblclick", (e) => {
+    const task = e.target.innerHTML;
+    if (e.target.className !== "todo-text") {
+      return;
+    }
+    e.target.contentEditable = true;
+    //CTRL to save the edit task
+    document.addEventListener("keydown", async (event) => {
+      if (event.ctrlKey) {
+        // you cant save an empty task
+        if (e.target.innerHTML === "") {
+          e.target.innerHTML = task;
+        }
+        e.target.contentEditable = false;
+        await savingCanges();
+      }
+    });
+    e.target.innerHTML = task;
+  });
+
+  //function that saving all the tasks in the local storage
+  async function savingCanges() {
+    let arr = document.getElementsByClassName("todo-container");
+    let newArr = [];
+    for (const task of arr) {
+      const priority = task.childNodes[1].innerHTML;
+      const date = task.childNodes[2].innerHTML;
+      const taskInner = task.childNodes[3].innerHTML;
+      newArr.push({
+        priority: priority,
+        date: date,
+        text: taskInner,
+      });
+    }
+    countText.innerText = newArr.length;
+    await setPersistent(newArr);
+    taskArr = await getPersistent();
+  }
+
+  searchButton.addEventListener("click", () => {
+    const searchInput = textInput.value;
+    if (searchInput === "") {
+      return;
+    }
+    textInput.value = "";
+    const arr = document.querySelectorAll(".todo-text");
+    for (const task of arr) {
+      if (task.innerHTML.search(searchInput) !== -1) {
+        task.style.color = "red";
+      } else {
+        task.style.color = "#444444";
+      }
+    }
+  });
+}
+main();
