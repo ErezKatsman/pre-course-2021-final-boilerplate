@@ -3,6 +3,7 @@ const addButton = document.getElementById("add-button"); //add button
 const sortButton = document.getElementById("sort-button"); // sort button
 const viewSection = document.getElementById("view-section"); //the view section
 const countText = document.getElementById("counter"); // the counter tasks
+const searchButton = document.getElementById("search-button");
 
 //if the local storage is empty set empty tasks array else save in the LS
 if (localStorage.getItem("taskArr") === null) {
@@ -129,21 +130,10 @@ document.addEventListener("click", (e) => {
     //if you dont click on the pin
     return;
   }
+  const tooltipDelete = document.getElementById("tooltip-delete");
   e.target.parentNode.remove();
-  let taskArr = document.getElementsByClassName("todo-container");
-  let newArr = [];
-  for (const task of taskArr) {
-    const priority = task.childNodes[1].innerHTML;
-    const date = task.childNodes[2].innerHTML;
-    const taskInner = task.childNodes[3].innerHTML;
-    newArr.push({
-      priority: priority,
-      date: date,
-      task: taskInner,
-    });
-  }
-  localStorage.setItem("taskArr", JSON.stringify(newArr));
-  countText.innerText = `${JSON.parse(localStorage.getItem("taskArr")).length}`;
+  tooltipDelete.hidden = true;
+  savingCanges();
 });
 
 //event of a delete pin tooltip
@@ -204,34 +194,54 @@ document.addEventListener("mouseout", (e) => {
   tooltipEdit.hidden = true;
 });
 
+//double click on .todo-text div for edit
 document.addEventListener("dblclick", (e) => {
+  const task = e.target.innerHTML;
   if (e.target.className !== "todo-text") {
     return;
   }
   e.target.contentEditable = true;
+  //CTRL to save the edit task
   document.addEventListener("keydown", (event) => {
     if (event.ctrlKey) {
+      // you cant save an empty task
       if (e.target.innerHTML === "") {
-        alert("You can't save an empty task");
-        return;
+        e.target.innerHTML = task;
       }
       e.target.contentEditable = false;
-      let taskArr = document.getElementsByClassName("todo-container");
-      let newArr = [];
-      for (const task of taskArr) {
-        const priority = task.childNodes[1].innerHTML;
-        const date = task.childNodes[2].innerHTML;
-        const taskInner = task.childNodes[3].innerHTML;
-        newArr.push({
-          priority: priority,
-          date: date,
-          task: taskInner,
-        });
-      }
-      localStorage.setItem("taskArr", JSON.stringify(newArr));
-      countText.innerText = `${
-        JSON.parse(localStorage.getItem("taskArr")).length
-      }`;
+      savingCanges();
     }
   });
+  e.target.innerHTML = task;
+});
+
+//runction that saving all the tasks i nthe local storage
+function savingCanges() {
+  let taskArr = document.getElementsByClassName("todo-container");
+  let newArr = [];
+  for (const task of taskArr) {
+    const priority = task.childNodes[1].innerHTML;
+    const date = task.childNodes[2].innerHTML;
+    const taskInner = task.childNodes[3].innerHTML;
+    newArr.push({
+      priority: priority,
+      date: date,
+      task: taskInner,
+    });
+  }
+  localStorage.setItem("taskArr", JSON.stringify(newArr));
+  countText.innerText = `${JSON.parse(localStorage.getItem("taskArr")).length}`;
+}
+
+searchButton.addEventListener("click", () => {
+  const searchInput = textInput.value;
+  textInput.value = "";
+  const taskArr = document.querySelectorAll(".todo-text");
+  for (const task of taskArr) {
+    if (task.innerHTML.search(searchInput) !== -1) {
+      task.style.color = "red";
+    } else {
+      task.style.color = "#444444";
+    }
+  }
 });
