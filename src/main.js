@@ -4,16 +4,20 @@ async function main() {
   const sortButton = document.getElementById("sort-button"); // sort button
   const viewSection = document.getElementById("view-section"); //the view section
   const countText = document.getElementById("counter"); // the counter tasks
-  const searchButton = document.getElementById("search-button");
+  const searchButton = document.getElementById("search-button"); //the search button
 
+  // Gets data from persistent storage by the given key and returns it
   async function getPersistent() {
     const response = await fetch(
       "https://api.jsonbin.io/v3/b/6016e8c70ba5ca5799d1b5f9/latest"
     );
     const data = await response.json();
+
     return data.record["my-todo"];
   }
 
+  // Saves the given data into persistent storage by the given key.
+  // Returns 'true' on success.
   async function setPersistent(data) {
     await fetch("https://api.jsonbin.io/v3/b/6016e8c70ba5ca5799d1b5f9", {
       method: "put",
@@ -21,18 +25,16 @@ async function main() {
       body: JSON.stringify({ "my-todo": data }),
     });
   }
-
   let taskArr = await getPersistent();
   printViewSection(taskArr);
   countText.innerText = JSON.stringify(taskArr.length);
 
-  //event of add button that add to local storage and to view section
+  //event of add button
   await addButton.addEventListener("click", async () => {
     const pin = document.createElement("div"); //making the pin with random color
     pin.className = "pin";
     var randomColor = Math.floor(Math.random() * 16777215).toString(16);
     pin.style.backgroundColor = `#${randomColor}`;
-
     const task = textInput.value;
     if (task === "") {
       //if the input is empty - get out from the function
@@ -43,31 +45,26 @@ async function main() {
     let priority = document.getElementById("priority-selector").value;
     const todoContainer = document.createElement("div");
     todoContainer.className = "todo-container";
-
     const color = colorTask(priority); //paint the task backgorund div for each priority
     todoContainer.style.backgroundColor = color;
-
     const priorityDiv = document.createElement("div"); //making priority div
     priorityDiv.innerHTML = priority;
     priorityDiv.className = "todo-priority";
-
     const createdAtDiv = document.createElement("div"); //making date div
     createdAtDiv.innerHTML = new Date().toDateString();
     createdAtDiv.className = "todo-created-at";
-
     const textDiv = document.createElement("div"); //created task div
     textDiv.innerHTML = task;
     textDiv.className = "todo-text";
-
     todoContainer.append(pin, priorityDiv, createdAtDiv, textDiv);
     viewSection.appendChild(todoContainer);
-
     taskArr.push({
+      //push the task to the main arr
       priority: priority,
       date: new Date().toDateString(),
       text: task,
     });
-    await setPersistent(taskArr);
+    await setPersistent(taskArr); //set the taskArr in the JSON bin
     countText.innerText = taskArr.length;
   });
 
@@ -91,7 +88,7 @@ async function main() {
     }
   });
 
-  //function that gets the type of arr that we have in local storage => arr of objects
+  //function that gets the type of arr that we have in JSON bin => arr of objects
   function printViewSection(arr) {
     viewSection.innerText = "";
     for (let i = 0; i < arr.length; i++) {
@@ -142,7 +139,7 @@ async function main() {
     }
   }
 
-  //event that delete an item in the view section and loacl storage
+  //event that delete an item in the view section and JSON bin
   document.addEventListener("click", (e) => {
     if (e.target.className !== "pin") {
       //if you dont click on the pin
@@ -178,12 +175,12 @@ async function main() {
   const darkLight = document.getElementById("dark-light");
   const theme = document.querySelector("#theme-link");
   darkLight.addEventListener("click", () => {
-    if (theme.getAttribute("href") == "style.css") {
+    if (theme.getAttribute("href") == "light.css") {
       theme.href = "dark.css";
       localStorage.setItem("mode", "dark");
       darkLight.innerText = "light";
     } else {
-      theme.href = "style.css";
+      theme.href = "light.css";
       localStorage.setItem("mode", "light");
       darkLight.innerText = "dark";
     }
@@ -234,7 +231,7 @@ async function main() {
     e.target.innerHTML = task;
   });
 
-  //function that saving all the tasks in the local storage
+  //function that saving all the tasks in JSON bin
   async function savingCanges() {
     let arr = document.getElementsByClassName("todo-container");
     let newArr = [];
@@ -253,9 +250,11 @@ async function main() {
     taskArr = await getPersistent();
   }
 
+  // event of search button that paint the font of the searched task
   searchButton.addEventListener("click", () => {
     const searchInput = textInput.value;
     if (searchInput === "") {
+      //if the input is empty - do nothing
       return;
     }
     textInput.value = "";
