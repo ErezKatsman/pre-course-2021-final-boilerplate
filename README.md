@@ -10,7 +10,7 @@ TODO-List uses JSONBIN.io (https://jsonbin.io/) to save your tasks and bring the
 - Add tasks 📝
 - Sort by priority (5 is the highest priority)
 - Count the tasks
-- Good Luck! 🤘
+- Passed all the tests
 
 
 ## Bounus
@@ -29,3 +29,6 @@ TODO-List uses JSONBIN.io (https://jsonbin.io/) to save your tasks and bring the
 - Simple using tool, the app could fit to the older people that have no idea how to use computers.
 
 ___________________________________________________________________________________________________________________________________________________________________________________
+
+So, what are you waiting for?? Go to this link below and see what an awesome app! 🤘
+link to the app 
