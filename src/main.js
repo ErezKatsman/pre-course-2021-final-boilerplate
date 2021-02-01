@@ -1,3 +1,22 @@
+//event of dark or light mode that toggle the css href
+const darkLight = document.getElementById("dark-light");
+const theme = document.querySelector("#theme-link");
+darkLight.addEventListener("click", () => {
+  if (theme.getAttribute("href") == "light.css") {
+    theme.href = "dark.css";
+    localStorage.setItem("mode", "dark");
+    darkLight.innerText = "light";
+  } else {
+    theme.href = "light.css";
+    localStorage.setItem("mode", "light");
+    darkLight.innerText = "dark";
+  }
+});
+if (localStorage.getItem("mode") === "dark") {
+  // saving the loacl storage mode
+  theme.href = "dark.css";
+  darkLight.innerText = "light";
+}
 async function main() {
   const textInput = document.getElementById("text-input"); //text input
   const addButton = document.getElementById("add-button"); //add button
@@ -36,7 +55,7 @@ async function main() {
     var randomColor = Math.floor(Math.random() * 16777215).toString(16);
     pin.style.backgroundColor = `#${randomColor}`;
     const task = textInput.value;
-    if (task === "") {
+    if (!task.trim()) {
       //if the input is empty - get out from the function
       alert("Please enter your task and prioirity");
       return;
@@ -148,7 +167,7 @@ async function main() {
     const tooltipDelete = document.getElementById("tooltip-delete");
     e.target.parentNode.remove();
     tooltipDelete.hidden = true;
-    savingCanges();
+    savingChanges();
   });
 
   //event of a delete pin tooltip
@@ -170,26 +189,6 @@ async function main() {
     const tooltipDelete = document.getElementById("tooltip-delete");
     tooltipDelete.hidden = true;
   });
-
-  //event of dark or light mode that toggle the css href
-  const darkLight = document.getElementById("dark-light");
-  const theme = document.querySelector("#theme-link");
-  darkLight.addEventListener("click", () => {
-    if (theme.getAttribute("href") == "light.css") {
-      theme.href = "dark.css";
-      localStorage.setItem("mode", "dark");
-      darkLight.innerText = "light";
-    } else {
-      theme.href = "light.css";
-      localStorage.setItem("mode", "light");
-      darkLight.innerText = "dark";
-    }
-  });
-  if (localStorage.getItem("mode") === "dark") {
-    // saving the loacl storage mode
-    theme.href = "dark.css";
-    darkLight.innerText = "light";
-  }
 
   //event of a edit tooltip
   document.addEventListener("mouseover", (e) => {
@@ -225,14 +224,14 @@ async function main() {
           e.target.innerHTML = task;
         }
         e.target.contentEditable = false;
-        await savingCanges();
+        await savingChanges();
       }
     });
     e.target.innerHTML = task;
   });
 
   //function that saving all the tasks in JSON bin
-  async function savingCanges() {
+  async function savingChanges() {
     let arr = document.getElementsByClassName("todo-container");
     let newArr = [];
     for (const task of arr) {
@@ -253,7 +252,7 @@ async function main() {
   // event of search button that paint the font of the searched task
   searchButton.addEventListener("click", () => {
     const searchInput = textInput.value;
-    if (searchInput === "") {
+    if (!searchInput.trim()) {
       //if the input is empty - do nothing
       return;
     }
