@@ -28,7 +28,7 @@ async function main() {
   // Gets data from persistent storage by the given key and returns it
   async function getPersistent() {
     const response = await fetch(
-      "https://api.jsonbin.io/v3/b/6016e8c70ba5ca5799d1b5f9/latest"
+      "https://api.jsonbin.io/v3/b/602a718799ac3873a349c2b4/latest"
     );
     const data = await response.json();
 
@@ -38,7 +38,7 @@ async function main() {
   // Saves the given data into persistent storage by the given key.
   // Returns 'true' on success.
   async function setPersistent(data) {
-    await fetch("https://api.jsonbin.io/v3/b/6016e8c70ba5ca5799d1b5f9", {
+    await fetch("https://api.jsonbin.io/v3/b/602a718799ac3873a349c2b4", {
       method: "put",
       headers: { "Content-type": "application/json" },
       body: JSON.stringify({ "my-todo": data }),
