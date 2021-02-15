@@ -26,13 +26,17 @@ async function main() {
   const searchButton = document.getElementById("search-button"); //the search button
 
   // Gets data from persistent storage by the given key and returns it
-  async function getPersistent() {
-    const response = await fetch(
+  function getPersistent() {
+    const promise = fetch(
       "https://api.jsonbin.io/v3/b/602a718799ac3873a349c2b4/latest"
     );
-    const data = await response.json();
-
-    return data.record["my-todo"];
+    const loadedData = promise.then((response) => {
+      return response.json();
+    });
+    const data = loadedData.then((result) => {
+      return result.record["my-todo"];
+    });
+    return data;
   }
 
   // Saves the given data into persistent storage by the given key.
@@ -49,7 +53,7 @@ async function main() {
   countText.innerText = JSON.stringify(taskArr.length);
 
   //event of add button
-  await addButton.addEventListener("click", async () => {
+  addButton.addEventListener("click", () => {
     const pin = document.createElement("div"); //making the pin with random color
     pin.className = "pin";
     var randomColor = Math.floor(Math.random() * 16777215).toString(16);
@@ -83,7 +87,7 @@ async function main() {
       date: new Date().toDateString(),
       text: task,
     });
-    await setPersistent(taskArr); //set the taskArr in the JSON bin
+    setPersistent(taskArr); //set the taskArr in the JSON bin
     countText.innerText = taskArr.length;
   });
 
