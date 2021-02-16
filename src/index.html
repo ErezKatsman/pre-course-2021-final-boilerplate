@@ -1,11 +1,11 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
+    <script src="./utils.js"></script>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>My TODO List</title>
     <link rel="stylesheet" href="light.css" id="theme-link" />
-    <script src="utils.js"></script>
     <link rel="preconnect" href="https://fonts.gstatic.com" />
     <link
       href="https://fonts.googleapis.com/css2?family=Just+Me+Again+Down+Here&display=swap"
@@ -25,6 +25,7 @@
     />
   </head>
   <body>
+    <div id="loader" class="loader" hidden="true"></div>
     <!-- delete and edit tooltips -->
     <div id="tooltip-delete" hidden>click to delete</div>
     <div id="tooltip-edit" hidden>Double click to edit / Ctrl to save</div>
