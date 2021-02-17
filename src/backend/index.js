@@ -18,6 +18,7 @@ app.get("/tasks", (req, res) => {
 });
 
 app.get("/tasks/:id", (req, res) => {
+  //picture
   const id = req.params.id;
   const data = fs.readFileSync(`./src/backend/tasks/${id}.json`, {
     encoding: "utf8",
