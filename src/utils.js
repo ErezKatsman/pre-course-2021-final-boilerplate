@@ -1,6 +1,3 @@
-let todoContainers = document.getElementsByClassName("todo-container");
-console.log(todoContainers);
-
 // Gets data from persistent storage by the given key and returns it
 function getPersistent() {
   for (const todo of todoContainers) {
