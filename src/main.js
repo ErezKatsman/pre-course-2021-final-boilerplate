@@ -23,7 +23,6 @@ const sortButton = document.getElementById("sort-button"); // sort button
 const viewSection = document.getElementById("view-section"); //the view section
 const countText = document.getElementById("counter"); // the counter tasks
 const searchButton = document.getElementById("search-button"); //the search button
-let todoContainers = document.getElementsByClassName("todo-container");
 let taskArr = [];
 const loader = document.getElementById("loader");
 
