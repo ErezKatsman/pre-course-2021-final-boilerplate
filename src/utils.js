@@ -1,5 +1,7 @@
 // Gets data from persistent storage by the given key and returns it
 function getPersistent() {
+  let todoContainers = document.querySelectorAll(".todo-container");
+  console.log(todoContainers);
   for (const todo of todoContainers) {
     todo.hidden = true;
   }
@@ -24,6 +26,8 @@ function getPersistent() {
 // Saves the given data into persistent storage by the given key.
 // Returns 'true' on success.
 function setPersistent(data) {
+  let todoContainers = document.querySelectorAll(".todo-container");
+  console.log(todoContainers);
   for (const todo of todoContainers) {
     todo.hidden = true;
   }
