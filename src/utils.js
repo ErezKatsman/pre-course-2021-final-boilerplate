@@ -1,19 +1,18 @@
 // Gets data from persistent storage by the given key and returns it
 function getPersistent() {
   let todoContainers = document.querySelectorAll(".todo-container");
-  console.log(todoContainers);
   for (const todo of todoContainers) {
     todo.hidden = true;
   }
   loader.hidden = false;
-  const promise = fetch(
-    "https://api.jsonbin.io/v3/b/602a718799ac3873a349c2b4/latest"
-  );
+  //
+  const promise = fetch("http://localhost:3008/v3/b");
   const loadedData = promise.then((response) => {
     return response.json();
   });
   const data = loadedData.then((result) => {
-    taskArr = result.record["my-todo"];
+    console.log(result);
+    taskArr = result;
     loader.hidden = true;
     for (const todo of todoContainers) {
       todo.hidden = false;
@@ -27,20 +26,40 @@ function getPersistent() {
 // Returns 'true' on success.
 function setPersistent(data) {
   let todoContainers = document.querySelectorAll(".todo-container");
-  console.log(todoContainers);
   for (const todo of todoContainers) {
     todo.hidden = true;
   }
   loader.hidden = false;
-  fetch("https://api.jsonbin.io/v3/b/602a718799ac3873a349c2b4", {
-    method: "put",
-    headers: { "Content-type": "application/json" },
-    body: JSON.stringify({ "my-todo": data }),
+  fetch("http://localhost:3008/v3/b", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(data),
   }).then((res) => {
     loader.hidden = true;
     for (const todo of todoContainers) {
       todo.hidden = false;
     }
-    return res.json();
+    const finalRes = res.json().then((final) => {
+      return final;
+    });
+    return finalRes;
   });
+}
+
+function deletePersistent(index) {
+  let todoContainers = document.querySelectorAll(".todo-container");
+  for (const todo of todoContainers) {
+    todo.hidden = true;
+  }
+  loader.hidden = false;
+  //
+  fetch(`http://localhost:3008/v3/b/${index}`, {
+    method: "DELETE",
+    headers: { "Content-Type": "application/json" },
+  });
+  loader.hidden = true;
+  for (const todo of todoContainers) {
+    todo.hidden = false;
+  }
+  countText.innerText = JSON.stringify(taskArr.length);
 }

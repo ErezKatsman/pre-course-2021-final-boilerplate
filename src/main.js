@@ -26,6 +26,8 @@ const searchButton = document.getElementById("search-button"); //the search butt
 let taskArr = [];
 const loader = document.getElementById("loader");
 
+//add hide spinner and show spinner
+
 document.addEventListener("DOMConetentLoaded", getPersistent());
 
 //event of add button
@@ -63,7 +65,11 @@ addButton.addEventListener("click", () => {
     date: new Date().toDateString(),
     text: task,
   });
-  setPersistent(taskArr); //set the taskArr in the JSON bin
+  setPersistent({
+    priority: priority,
+    date: new Date().toDateString(),
+    text: task,
+  }); //set the taskArr in the JSON bin
   countText.innerText = taskArr.length;
 });
 
@@ -144,10 +150,19 @@ document.addEventListener("click", (e) => {
     //if you dont click on the pin
     return;
   }
+  const pinCollection = document.getElementsByClassName("pin");
+  const pinArr = [];
+  for (let pin of pinCollection) {
+    pinArr.push(pin);
+  }
   const tooltipDelete = document.getElementById("tooltip-delete");
+  let index = pinArr.indexOf(e.target);
   e.target.parentNode.remove();
+  taskArr.splice(index, 1);
+  countText.innerText = taskArr.length;
   tooltipDelete.hidden = true;
-  savingChanges();
+  console.log(taskArr);
+  deletePersistent(index);
 });
 
 //event of a delete pin tooltip
@@ -203,29 +218,29 @@ document.addEventListener("dblclick", (e) => {
         e.target.innerHTML = task;
       }
       e.target.contentEditable = false;
-      savingChanges();
+      // savingChanges();
     }
   });
   e.target.innerHTML = task;
 });
 
 //function that saving all the tasks in JSON bin
-function savingChanges() {
-  let arr = document.getElementsByClassName("todo-container");
-  taskArr = [];
-  for (const task of arr) {
-    const priority = task.childNodes[1].innerHTML;
-    const date = task.childNodes[2].innerHTML;
-    const taskInner = task.childNodes[3].innerHTML;
-    taskArr.push({
-      priority: priority,
-      date: date,
-      text: taskInner,
-    });
-  }
-  countText.innerText = taskArr.length;
-  setPersistent(taskArr);
-}
+// function savingChanges() {
+//   let arr = document.getElementsByClassName("todo-container");
+//   taskArr = [];
+//   for (const task of arr) {
+//     const priority = task.childNodes[1].innerHTML;
+//     const date = task.childNodes[2].innerHTML;
+//     const taskInner = task.childNodes[3].innerHTML;
+//     taskArr.push({
+//       priority: priority,
+//       date: date,
+//       text: taskInner,
+//     });
+//   }
+//   countText.innerText = taskArr.length;
+//   setPersistent(taskArr);
+// }
 
 // event of search button that paint the font of the searched task
 searchButton.addEventListener("click", () => {
