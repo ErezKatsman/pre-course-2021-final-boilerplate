@@ -89,7 +89,7 @@ body {
 .inputs {
   border-style: outset;
   padding: 25px;
-  margin: 0 335px;
+  margin: 0 20vw;
   border-width: 2px;
   border-radius: 10px;
   background-color: rgb(200, 160, 106);
@@ -164,7 +164,7 @@ body {
 
 #view-section {
   margin: auto;
-  width: 1400px;
+  width: 90vw;
   min-height: 550px;
   text-align: center;
   background-image: url("./img/board.jpeg");
@@ -231,10 +231,19 @@ body {
   color: rgb(253, 121, 121);
 }
 
-/* to make the tests pass */
-@media screen and (max-width: 950px) {
+@media screen and (max-width: 1600px) {
+  .contact-section {
+    left: 200px;
+  }
+  .control-section > button {
+    width: 7%;
+  }
+  .inputs {
+    margin: 0 10px;
+  }
   .contact-container {
     z-index: -1;
+    visibility: hidden;
   }
 }
 

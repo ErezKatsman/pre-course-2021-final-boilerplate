@@ -17,7 +17,7 @@ function getPersistent() {
 // Returns 'true' on success.
 function setPersistent(data) {
   updateSpinner("show");
-  fetch("http://localhost:3008/v3/b", {
+  fetch("http://localhost:3008/v3/b/a", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(data),
