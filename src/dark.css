@@ -170,8 +170,8 @@ body {
 
 #view-section {
   margin: auto;
-  width: 90vw;
-  min-height: 550px;
+  width: 70vw;
+  min-height: 600px;
   text-align: center;
   background-image: url("./img/board.jpeg");
   background-size: 100% 100%;
