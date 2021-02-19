@@ -70,7 +70,6 @@ addButton.addEventListener("click", () => {
     date: new Date().toDateString(),
     text: task,
   }); //set the taskArr in the JSON bin
-  countText.innerText = taskArr.length;
 });
 
 let isSorted = false;
@@ -157,11 +156,12 @@ document.addEventListener("click", (e) => {
   }
   const tooltipDelete = document.getElementById("tooltip-delete");
   let index = pinArr.indexOf(e.target);
-  e.target.parentNode.remove();
+  //e.target.parentNode.remove();
   taskArr.splice(index, 1);
   countText.innerText = taskArr.length;
   tooltipDelete.hidden = true;
   console.log(taskArr);
+  e.target.parentNode.remove();
   deletePersistent(index);
 });
 
@@ -205,10 +205,18 @@ document.addEventListener("mouseout", (e) => {
 
 //double click on .todo-text div for edit
 document.addEventListener("dblclick", (e) => {
-  const task = e.target.innerHTML;
+  let task = e.target.innerHTML;
+  console.log(task);
   if (e.target.className !== "todo-text") {
     return;
   }
+  const divCollection = document.getElementsByClassName("todo-text");
+  const divArr = [];
+
+  for (let div of divCollection) {
+    divArr.push(div);
+  }
+  let index = divArr.indexOf(e.target);
   e.target.contentEditable = true;
   //CTRL to save the edit task
   document.addEventListener("keydown", (event) => {
@@ -218,7 +226,9 @@ document.addEventListener("dblclick", (e) => {
         e.target.innerHTML = task;
       }
       e.target.contentEditable = false;
-      // savingChanges();
+      task = e.target.innerText;
+      taskArr[index].text = task;
+      editPersistent(taskArr[index], index);
     }
   });
   e.target.innerHTML = task;
