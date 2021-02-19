@@ -7,8 +7,7 @@ function getPersistent() {
     return response.json();
   });
   const data = loadedData.then((result) => {
-    console.log(result);
-    taskArr = result;
+    taskArr = result.data;
     updateSpinner("hide");
     printViewSection(taskArr);
   });
@@ -64,7 +63,6 @@ function updateSpinner(stance) {
       for (const todo of todoContainers) {
         todo.hidden = false;
       }
-      console.log(taskArr.length);
       countText.innerText = JSON.stringify(taskArr.length);
       break;
     case "show":
